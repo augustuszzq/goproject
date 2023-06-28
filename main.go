@@ -1,13 +1,59 @@
+// package main
+//
+// import (
+//   "fmt"
+//   "time"
+// )
+//
+// func main() {
+//     for{
+//       fmt.Println("hello world")#System D
+//       time.Sleep(10*time.Second)
+//     }
+// }
 package main
 
 import (
-  "fmt"
-  "time"
+    "log"
+
+    "github.com/fsnotify/fsnotify"
 )
 
 func main() {
-    for{
-      fmt.Println("hello world")#System D
-      time.Sleep(10*time.Second)
+    // Create new watcher.
+    watcher, err := fsnotify.NewWatcher()
+    if err != nil {
+        log.Fatal(err)
     }
+    defer watcher.Close()
+
+    // Start listening for events.
+    go func() {
+        for {
+            select {
+            case event, ok := <-watcher.Events:
+                if !ok {
+                    return
+                }
+                log.Println("event:", event)
+                if event.Has(fsnotify.Write) {
+                    log.Println("modified file:", event.Name)
+                }
+            case err, ok := <-watcher.Errors:
+                if !ok {
+                    return
+                }
+                log.Println("error:", err)
+            }
+        }
+    }()
+
+    // Add a path.
+    err = watcher.Add("/etc/supervisor/conf.d/supervisord.conf")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Block main goroutine forever.
+    <-make(chan struct{})
 }

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supervisord-config
+data:
+
+  # file-like keys
+  supervisord.conf: |
+    [supervisord]
+    nodaemon=true
+
+    [program:jupyter notebook]
+    command=jupyter notebook

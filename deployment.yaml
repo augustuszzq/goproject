@@ -14,9 +14,21 @@ spec:
     spec:
       containers:
       - name: nginx
-        # imagePullPolicy: Never
-        imagePullPolicy: Always
-        image: us-central1-docker.pkg.dev/cool-ascent-221213/goproject/goproject:latest
-        # image: tail:test
+        imagePullPolicy: Never
+        #imagePullPolicy: Always
+        #image: us-central1-docker.pkg.dev/cool-ascent-221213/goproject/goproject:latest
+        image: goproject:latest
         ports:
         - containerPort: 3080
+
+        volumeMounts:
+        - name: supervisord-config
+          mountPath: "/etc/supervisor/conf.d"
+          readOnly: true
+      volumes:
+      # You set volumes at the Pod level, then mount them into containers inside that Pod
+      - name: supervisord-config
+        configMap:
+          # Provide the name of the ConfigMap you want to mount.
+          name: supervisord-config
+          # An array of keys from the ConfigMap to create as files
