@@ -17,7 +17,7 @@ spec:
         imagePullPolicy: Never
         #imagePullPolicy: Always
         #image: us-central1-docker.pkg.dev/cool-ascent-221213/goproject/goproject:latest
-        image: goproject:latest
+        image: goproject:test
         ports:
         - containerPort: 3080
 

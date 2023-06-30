@@ -6,8 +6,11 @@ data:
 
   # file-like keys
   supervisord.conf: |
+    [supervisorctl]
+
     [supervisord]
     nodaemon=true
+    logfile=/var/log/supervisord.log
 
-    [program:jupyter notebook]
-    command=jupyter notebook
+    [program:jupyter_notebook]
+    command=jupyter-notebook --allow-root
